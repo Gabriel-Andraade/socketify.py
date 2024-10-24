@@ -97,7 +97,7 @@ app.get("/user/:id", user)
 
 ### Headers
 
-Você pode usar `req.get_header(lowercase_header_name)` para obter o valor da string do Headers como String ou usar `req.get_headers()` para obter como um ditado, `req.for_each_header()` se você quiser apenas iterar nos headers. Você também pode definir o Headers usando `res.write_header(name, value)`.
+Você pode usar `req.get_header(lowercase_header_name)` para obter o valor da string do Headers como String ou usar `req.get_headers()` para obter como um dict, `req.for_each_header()` se você quiser apenas iterar nos headers. Você também pode definir o Headers usando `res.write_header(name, value)`.
 
 ```python
 def home(res, req):
@@ -170,16 +170,16 @@ def home(res, req):
     res.write("Your IP as seen by the origin server is: %s" % res.get_remote_address())
     res.end("</h1></html>")
 ```
-> The difference between the _bytes() version an non bytes is that one returns an String an the other the raw bytes
+> A diferença entre a versão _bytes() e a non bytes é que uma retorna String e a outra raw bytes.
 
 
-## Pub/Sub de aplicativo
-`app.num_subscribers(topic)` retornará o número de assinantes no tópico.
+## Pub/Sub de app
+`app.num_subscribers(topic)` retornará o número de inscritos no tópico.
 `app.publish(topic, message, opcode=OpCode.BINARY, compress=False)` irá enviar uma mensagem para todos os inscritos no tópico.
 
 
-## Verifique se foi abordado
-Se a conexão for abortada você pode marcar `res.aborted` que retornará True ou False. Você também pode capturar o manipulador de aborto, ao usar uma rota assíncrona, o Socketify sempre capturará automaticamente o manipulador de aborto.
+## Verifique o aborted
+Se a conexão for abortada você pode marcar `res.aborted` que retornará True ou False. Você também pode pegar o aborded, ao usar uma rota assíncrona, o Socketify sempre capturará automaticamente o manipulador de aborto.
 
 ```python
 def home(res, req):
@@ -190,7 +190,7 @@ def home(res, req):
     res.on_aborted(on_abort)
 ```
 
-## Executando assíncrono a partir da rota de sincronização
+## Executando async a partir da rota de sincronização
 Se você quiser otimizar muito e não usar async sem necessidade você pode usar `res.run_async() or app.run_async()` para executar uma corrotina
 
 ```python
@@ -200,7 +200,7 @@ def route_handler(res, req):
     if in_memory_text:
         res.end(in_memory_text)
     else:
-        # pegue o manipulador de aborto adicionando-o a 'res.aborted' se for abortado
+        # pegue o abort handler adicionando-o a 'res.aborted' se for aborted
         res.grab_aborted_handler() 
         res.run_async(sendfile(res, req, "my_text"))
 ```
@@ -240,7 +240,7 @@ Você pode usar eventos de início e encerramento do socketify para criar/limpar
 
 Se ocorrer alguma exceção no evento de início, o aplicativo continuará e iniciará normalmente, se você quiser que  uma inicialização falhe, você precisa capturar a exceção e usar `sys.exit(1)` para desligar prematuramente.
 
-Tanto `app.on_start` e `app.on_shutdown` podem ser sincronizados e assíncronos.
+Tanto `app.on_start` e `app.on_shutdown` podem ser sincronizados e async.
 
 
 ```python
@@ -298,4 +298,4 @@ def run(app: App):
 
 
 ```
-### Next [Upload and Post](upload-post.md)
+### próximo [Upload and Post](upload-post.md)

@@ -39,4 +39,4 @@ async def home(res, req):
 
 Para sua conveniência, temos `res.cork_end()`, `ws.cork_send()` que fará o cork e chamará o end para você, e também `res.render()` que responde usando sempre o `res.cork_end()` para enviar seu HTML/data
 
-### Next [Routes](routes.md)
+### próximo [Routes](routes.md)

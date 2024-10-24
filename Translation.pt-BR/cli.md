@@ -151,4 +151,4 @@ app.add_route("/", home)
 ws = falcon.asgi.App()
 ws.add_route("/", WebSocket())
 ```
-### Next [API Reference](api.md)
+### próximo [API Reference](api.md)
