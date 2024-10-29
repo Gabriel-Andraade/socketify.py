@@ -19,9 +19,9 @@ def devlog(handler):
 app = App()
 
 def home(res, req):
-    res.end("Hello World!")
+    res.end("Hello World!") # Answer for the route
 
-app.get("/", devlog(home))
+app.get("/", devlog(home)) # Apply o logging in route
 
 app.listen(
     3000,

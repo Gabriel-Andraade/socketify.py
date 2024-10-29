@@ -27,20 +27,21 @@ def ws_drain(ws):
         ws.send("This is a message, let's call it %i" % message_number)
         message_number = message_number + 1
         messages = messages + 1
-
+    # This function is called all time when buffer is empty,allowing the server for sending message again until the limit
 
 app = App()
 app.ws(
     "/*",
     {
         "compression": CompressOptions.DISABLED,
-        "max_payload_length": 16 * 1024 * 1024,
-        "idle_timeout": 60,
-        "open": ws_open,
-        "drain": ws_drain,
+        "max_payload_length": 16 * 1024 * 1024, # Max size payload
+        "idle_timeout": 60, # Max time 
+        "open": ws_open, # Define the open event
+        "drain": ws_drain, # Define the drain event
     },
 )
 app.any("/", lambda res, req: res.end("Nothing to see here!"))
+    # Define one route for all other request, it sends a message 
 app.listen(
     3000,
     lambda config: print("Listening on port http://localhost:%d now\n" % (config.port)),

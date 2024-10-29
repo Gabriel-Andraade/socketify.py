@@ -6,7 +6,7 @@ app = App()
 
 async def delayed_hello(delay, res):
     await asyncio.sleep(delay)  # do something async
-    res.cork_end("Hello with delay!")
+    res.cork_end("Hello with delay!") # Send the responde for the client
 
 
 def home(res, req):
@@ -17,7 +17,7 @@ def home(res, req):
     # tell response to run this in the event loop
     # abort handler is grabbed here, so responses only will be send if res.aborted == False
     res.run_async(delayed_hello(delay, res))
-
+    # Execute "delayed_hello" in async mode
 
 async def json(res, req):
     # request object only lives during the life time of this call
@@ -27,16 +27,17 @@ async def json(res, req):
     await asyncio.sleep(2)  # do something async
 
     res.cork_end({"message": "I'm delayed!", "user-agent": user_agent})
-
+        # This respond with Json
 
 def not_found(res, req):
-    res.write_status(404).end("Not Found")
+    res.write_status(404).end("Not Found")  # Returns error 404 for routes we not found
 
 
-app.get("/", home)
-app.get("/json", json)
-app.any("/*", not_found)
+app.get("/", home)  # route named "/" is called 'home'
+app.get("/json", json)  # Route named "/json" is called 'json'
+app.any("/*", not_found)    # All routes return 404
 
+    # Configure the server to test
 app.listen(
     3000,
     lambda config: print(

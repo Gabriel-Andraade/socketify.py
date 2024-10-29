@@ -2,6 +2,7 @@ from socketify import App, AppListenOptions
 
 app = App()
 app.get("/", lambda res, req: res.end("Hello World!"))
+    #Configure server for socket unix   
 app.listen(
     AppListenOptions(domain="/tmp/test.sock"),
     lambda config: print("Listening on port %s http://localhost/ now\n" % config.domain),
