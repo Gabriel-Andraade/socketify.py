@@ -4,7 +4,7 @@ import time
 import mimetypes
 import os
 from os import path
-    # Nedd to import this types of Library
+    # Need to import this types of Library
     
 mimetypes.init()
     # Enable the type "MIME"

@@ -1,6 +1,8 @@
 from socketify import App, AppListenOptions
 
 app = App()
+
+    # Set rote in root "/" that responds "Hello World socketify from Python!"
 app.get("/", lambda res, req: res.end("Hello World socketify from Python!"))
 app.listen(
     AppListenOptions(port=3000, host="0.0.0.0"),

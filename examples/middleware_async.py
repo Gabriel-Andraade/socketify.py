@@ -1,13 +1,13 @@
 from socketify import App
 
 # this is just an example of implementation you can just import using from socketify import middleware for an more complete version
-
+# Here you see what you can do for authentication of valid user
 
 async def get_user(authorization):
-    if authorization:
+    if authorization: # Verify if exist authorization
         # do actually something async here
-        return {"greeting": "Hello, World"}
-    return None
+        return {"greeting": "Hello, World"} # Return one dict 
+    return None # Return none if dont have authorization
 
 
 def auth(route):
@@ -21,25 +21,25 @@ def auth(route):
         queries = req.get_queries()
         # or just use req.preserve() to preserve all
 
-        user = await get_user(headers.get("authorization", None))
-        if user:
+        user = await get_user(headers.get("authorization", None)) # Verify authorization 
+        if user: # If user is authorized, call the route
             return route(res, req, user)
 
-        return res.write_status(403).cork_end("not authorized")
+        return res.write_status(403).cork_end("not authorized") # return 403'error' if not authorized
 
-    return auth_middleware
+    return auth_middleware # Return in middleware mode
 
 
 def home(res, req, user=None):
-    theme = req.get_query("theme_color")
-    theme = theme if theme else "light"
-    greeting = user.get("greeting", None)
-    user_id = req.get_parameter(0)
-    res.cork_end(f"{greeting} <br/> theme: {theme} <br/> id: {user_id}")
+    theme = req.get_query("theme_color") # Set query theme color
+    theme = theme if theme else "light" # Set the type of theme
+    greeting = user.get("greeting", None) # Set type of greeting
+    user_id = req.get_parameter(0) # Get the user ID route
+    res.cork_end(f"{greeting} <br/> theme: {theme} <br/> id: {user_id}") # Send the answer
 
 
-app = App()
-app.get("/user/:id", auth(home))
+app = App() # Create new application
+app.get("/user/:id", auth(home)) # Set route with authentication middleware
 app.listen(
     3000,
     lambda config: print("Listening on port http://localhost:%d now\n" % config.port),

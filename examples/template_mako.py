@@ -3,7 +3,7 @@ from socketify import App
 # see helper/templates.py for plugin implementation
 from helpers.templates import MakoTemplate
 
-
+ # here give the setting for mako
 app = App()
 app.template(
     MakoTemplate(
@@ -11,11 +11,11 @@ app.template(
     )
 )
 
-
+ # configure the setting for render the template of mako
 def home(res, req):
     res.render("mako_home.html", message="Hello, World")
 
-
+ # set one route for "/" to execute function "home"
 app.get("/", home)
 app.listen(
     3000,

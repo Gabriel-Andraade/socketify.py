@@ -10,7 +10,6 @@ async def get_user(authorization):
         return {"greeting": "Hello, World"}
     return None
 
-
 async def auth(res, req, data=None):
     # authentication middleware
     user = await get_user(req.get_header("authorization")) # Verify authentication 

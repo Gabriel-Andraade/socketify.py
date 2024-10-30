@@ -2,10 +2,11 @@ from socketify import App, AppOptions
 
 app = App(
     AppOptions(
-        key_file_name="./misc/key.pem",
-        cert_file_name="./misc/cert.pem",
-        passphrase="1234",
+        key_file_name="./misc/key.pem", # private key file path
+        cert_file_name="./misc/cert.pem", # certificate file path
+        passphrase="1234", # private key password
     )
+        # Set a route to respond
 )
 app.get("/", lambda res, req: res.end("Hello World socketify from Python!"))
 app.listen(

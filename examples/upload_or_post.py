@@ -6,22 +6,24 @@ from socketify import App
 
 
 def upload(res, req):
+    # handle with simple upload data
     print(f"Posted to {req.get_url()}")
 
     def on_data(res, chunk, is_end):
-        print(f"Got chunk of data with length {len(chunk)}, is_end: {is_end}")
+        # callback called with a data chunk is received
+        print(f"Got chunk of data with length {len(chunk)}, is_end: {is_end}") # show chunk size
         if is_end:
-            res.cork_end("Thanks for the data!")
+            res.cork_end("Thanks for the data!") # respond client when all datas is receive
 
-    res.on_data(on_data)
+    res.on_data(on_data) # register function callback for receive data
 
 
 async def upload_chunks(res, req):
-    print(f"Posted to {req.get_url()}")
+    print(f"Posted to {req.get_url()}") # show upload of URL 
     # await all the data, returns received chunks if fail (most likely fail is aborted requests)
-    data = await res.get_data()
+    data = await res.get_data() # await all received data 
 
-    print(f"Got {len(data.getvalue())} bytes of data!")
+    print(f"Got {len(data.getvalue())} bytes of data!")  # show the maximum size
     
     # We respond when we are done
     res.cork_end("Thanks for the data!")
@@ -30,7 +32,7 @@ async def upload_chunks(res, req):
 async def upload_json(res, req):
     print(f"Posted to {req.get_url()}")
     # await all the data and parses as json, returns None if fail
-    info = await res.get_json()
+    info = await res.get_json() # await and analyzes datas like json
 
     print(info)
     
@@ -39,11 +41,12 @@ async def upload_json(res, req):
 
 
 async def upload_text(res, req):
+    # async function handle with upload
     print(f"Posted to {req.get_url()}")
     # await all the data and decode as text, returns None if fail
     text = await res.get_text()  # first parameter is the encoding (default utf-8)
 
-    print(f"Your text is {text}")
+    print(f"Your text is {text}") # show you text received
 
     # We respond when we are done
     res.cork_end("Thanks for the data!")
@@ -56,7 +59,7 @@ async def upload_urlencoded(res, req):
         await res.get_form_urlencoded()
     )  # first parameter is the encoding (default utf-8)
 
-    print(f"Your form is {form}")
+    print(f"Your form is {form}") # show form data received
 
     # We respond when we are done
     res.cork_end("Thanks for the data!")
@@ -73,14 +76,14 @@ async def upload_multiple(res, req):
     else:
         data = await res.get_text()
 
-    print(f"Your data is {data}")
+    print(f"Your data is {data}") # show received data
 
     # We respond when we are done
-    res.cork_end("Thanks for the data!")
+    res.cork_end("Thanks for the data!") # respond when all datas is received
 
 def upload_formdata(res, req):
     # using streaming_form_data package for parsing
-    from streaming_form_data import StreamingFormDataParser
+    from streaming_form_data import StreamingFormDataParser #
     from streaming_form_data.targets import ValueTarget, FileTarget
 
     print(f"Posted to {req.get_url()}")
@@ -143,14 +146,14 @@ async def upload_formhelper(res, req):
 
 
 app = App()
-app.post("/", upload)
-app.post("/chunks", upload_chunks)
-app.post("/json", upload_json)
-app.post("/text", upload_text)
-app.post("/urlencoded", upload_urlencoded)
-app.post("/multiple", upload_multiple)
-app.post("/formdata", upload_formdata)
-app.post("/formdata2", upload_formhelper)
+app.post("/", upload) # simple upload route
+app.post("/chunks", upload_chunks) # chunk upload route
+app.post("/json", upload_json) # json upload route 
+app.post("/text", upload_text) # text upload route
+app.post("/urlencoded", upload_urlencoded) # codified URL upload route
+app.post("/multiple", upload_multiple) # multiple upload route
+app.post("/formdata", upload_formdata) #  data form upload route
+app.post("/formdata2", upload_formhelper) # formhelper upload route
 
 app.any("/*", lambda res, _: res.write_status(404).end("Not Found"))
 app.listen(

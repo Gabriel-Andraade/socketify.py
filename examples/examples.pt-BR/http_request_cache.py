@@ -2,28 +2,28 @@ from socketify import App
 import redis
 import aiohttp
 import asyncio
-from helpers.twolevel_cache import TwoLevelCache # Import two level of caches
+from helpers.twolevel_cache import TwoLevelCache # Importe dois níveis de caches
 
-# create redis poll + connections
+# Criar enquete redis + conexões
 redis_pool = redis.ConnectionPool(host="localhost", port=6379, db=0)
 redis_connection = redis.Redis(connection_pool=redis_pool)
-# 2 LEVEL CACHE (Redis to share among workers, Memory to be much faster)
-# cache in memory is 30s, cache in redis is 60s duration
+# CACHE DE 2 NÍVEIS (Redis para compartilhar entre os trabalhadores, Memória para ser muito mais rápida)
+# Cache na memória é de 30s, cache no redis é de 60s de duração
 cache = TwoLevelCache(redis_connection, 30, 60)
 
 ###
 # Model
 ###
 
-    # Function async to fetch data from a specific Pokémon using PokeAPI
+    # Função async para buscar dados de um Pokémon específico usando PokeAPI
 async def get_pokemon(number):
     async with aiohttp.ClientSession() as session:
         async with session.get(
             f"https://pokeapi.co/api/v2/pokemon/{number}"
         ) as response:
-            pokemon = await response.text() # Response with text 
-            # cache only works with strings/bytes
-            # we will not change nothing here so no needs to parse json
+            pokemon = await response.text() # Resposta com texto
+            # Cache só funciona com strings/bytes
+            # Não mudaremos nada aqui, então não precisa analisar o json
             return pokemon.encode("utf-8")
 
     # Function async for fetch one list for 151 pokémon originals

@@ -38,7 +38,7 @@ def cookies(res, req):
     )
     res.end("Your session_id cookie is: %s" % req.get_cookie("session_id"))
 
-
+    # Show the type of user
 def useragent(res, req):
     res.end("Your user agent is: %s" % req.get_header("user-agent"))
 
